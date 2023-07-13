@@ -167,6 +167,16 @@ def turn_by_angle(lib, servo, angle, speed):
         print(errCode, errTextC.raw.decode())
         sys.exit(2)
 
+def get_angle(lib, servo):
+    errTextC = create_string_buffer(1000)
+    lib.RI_SDK_exec_ServoDrive_GetCurrentAngle.argtypes = [c_int, POINTER(c_int), c_char_p]
+    angle = c_int()
+    errCode = lib.RI_SDK_exec_ServoDrive_GetCurrentAngle(servo, angle, errTextC)
+    if errCode != 0:
+        print(errCode, errTextC.raw.decode())
+        sys.exit(2) 
+    return(angle.value) 
+
 def main():
 
     errTextC = create_string_buffer(1000)  # Текст ошибки. C type: char*
@@ -203,69 +213,25 @@ def main():
     turn_by_pulse(lib, servo_1, 1600)
     time.sleep(1) 
 
-    turn_by_angle(lib, servo_1, 90, 100)
+    turn_by_angle(lib, servo_1, 90, 200)
     time.sleep(1) 
 
-    turn_by_angle(lib, servo_1, -90, 100)
+    turn_by_angle(lib, servo_1, -180, 300)
     time.sleep(1) 
 
 
-    # # Поворот сервопривода на заданный угол с заданной угловой скоростью 
-    # errCode = lib.RI_SDK_exec_ServoDrive_Turn(servo_3, 90, 100, c_bool(False), errTextC)
-    # if errCode != 0:
-    #     print(errCode, errTextC.raw.decode())
-    #     sys.exit(2)
-    # print(90)
+    turn_by_pulse(lib, servo_2, 1600)
+    time.sleep(1) 
 
-    # errCode = lib.RI_SDK_exec_ServoDrive_Turn(servo_3, 90, 100, c_bool(False), errTextC)
-    # if errCode != 0:
-    #     print(errCode, errTextC.raw.decode())
-    #     sys.exit(2)
-    # print(90)
+    turn_by_angle(lib, servo_2, 90, 200)
+    time.sleep(1) 
 
+    turn_by_angle(lib, servo_2, -180, 300)
+    time.sleep(1) 
 
-    # errCode = lib.RI_SDK_exec_ServoDrive_Turn(servo_5, 90, 100, c_bool(False), errTextC)
-    # if errCode != 0:
-    #     print(errCode, errTextC.raw.decode())
-    #     sys.exit(2)
-
-    # time.sleep(0.5)        
-
-    # errCode = lib.RI_SDK_exec_ServoDrive_TurnByPulse(servo_1, 2600, errTextC)
-    # if errCode != 0:
-    #     print(errCode, errTextC.raw.decode())
-    #     sys.exit(2)
-
-    # time.sleep(0.5)        
-
-    # errCode = lib.RI_SDK_exec_ServoDrive_TurnByPulse(servo_2, 2600, errTextC)
-    # if errCode != 0:
-    #     print(errCode, errTextC.raw.decode())
-    #     sys.exit(2)
-
-    # time.sleep(0.5)        
-
-    # errCode = lib.RI_SDK_exec_ServoDrive_TurnByPulse(servo_3, 2600, errTextC)
-    # if errCode != 0:
-    #     print(errCode, errTextC.raw.decode())
-    #     sys.exit(2)
-
-#    errCode = lib.RI_SDK_exec_ServoDrive_Turn(servo_1, 90, 100, c_bool(False), errTextC)
-#    if errCode != 0:
-#        print(errCode, errTextC.raw.decode())
-#        sys.exit(2)
-
-
-   # Поучение текущего угла поворота сервопривода
-    # lib.RI_SDK_exec_ServoDrive_GetCurrentAngle.argtypes = [c_int, POINTER(c_int), c_char_p]
-    # time.sleep(0.2)
-    # angle = c_int()
-    # errCode = lib.RI_SDK_exec_ServoDrive_GetCurrentAngle(servo_2, angle, errTextC)
-    # if errCode != 0:
-    #     print(errCode, errTextC.raw.decode())
-    #     sys.exit(2) 
-
-    # print("angle: ", angle.value) 
+    print("servo_1 angle: " + str(get_angle(lib, servo_1)))
+    print("servo_2 angle: " + str(get_angle(lib, servo_2)))
+    print("servo_3 angle: " + str(get_angle(lib, servo_3)))
 
 
     # lib.RI_SDK_exec_RGB_LED_SinglePulse.argtypes = [c_int, c_int, c_int, c_int, c_int, c_bool, c_char_p]
