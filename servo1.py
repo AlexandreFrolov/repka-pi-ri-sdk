@@ -141,15 +141,11 @@ def main():
     errTextC = create_string_buffer(1000)  # Текст ошибки. C type: char*
     i2c = c_int()
     pwm = c_int()
-
     led = c_int()
-
     servo_1 = c_int() 
     servo_2 = c_int() 
     servo_3 = c_int() 
 
-
-    # Подключение библиотеки ri_sdk
     lib = cdll.LoadLibrary("C:\Windows\system32\librisdk.dll")
 
     init(lib, i2c, pwm)
@@ -169,7 +165,6 @@ def main():
         print(errCode, errTextC.raw.decode())
         sys.exit(2)
     print(90)
-
 
 
 #    errCode = lib.RI_SDK_exec_ServoDrive_Turn(servo_1, 90, 100, c_bool(False), errTextC)
@@ -207,4 +202,5 @@ def main():
     cleanup(lib, pwm, i2c, servo_1, servo_2, servo_3, led)
     print("Success")
 
-main()
+if __name__ == "__main__":
+    main()
