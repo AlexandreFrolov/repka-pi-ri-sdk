@@ -43,11 +43,11 @@ def init(lib, i2c, pwm):
         sys.exit(2) 
 
 
-def servo_init(lib, pwm, servo_1, servo_2, servo_3):
+def servo_init(lib, pwm, servo_1, servo_2, servo_3, servo_5):
     errTextC = create_string_buffer(1000) 
 
 
-# Инициализация 3-х сервоприводов
+# Инициализация сервоприводов
     errCode = lib.RI_SDK_CreateModelComponent("executor".encode(), "servodrive".encode(), "mg90s".encode(), servo_1, errTextC)
     if errCode != 0:
         print(errCode, errTextC.raw.decode())
@@ -63,7 +63,13 @@ def servo_init(lib, pwm, servo_1, servo_2, servo_3):
         print(errCode, errTextC.raw.decode())
         sys.exit(2) 
 
-# Подключение 3-х сервоприводов к шим модулятору
+    errCode = lib.RI_SDK_CreateModelComponent("executor".encode(), "servodrive".encode(), "mg90s".encode(), servo_5, errTextC)
+    if errCode != 0:
+        print(errCode, errTextC.raw.decode())
+        sys.exit(2) 
+
+
+# Подключение сервоприводов к шим модулятору
 
     errCode = lib.RI_SDK_LinkServodriveToController(servo_1, pwm, 0, errTextC)
     if errCode != 0:
@@ -79,6 +85,12 @@ def servo_init(lib, pwm, servo_1, servo_2, servo_3):
     if errCode != 0:
         print(errCode, errTextC.raw.decode())
         sys.exit(2) 
+
+    errCode = lib.RI_SDK_LinkServodriveToController(servo_5, pwm, 4, errTextC)
+    if errCode != 0:
+        print(errCode, errTextC.raw.decode())
+        sys.exit(2) 
+
 
 def led_init(lib, pwm, led):
     # Инициализация светодиода
@@ -98,8 +110,8 @@ def led_init(lib, pwm, led):
         sys.exit(2)
 
 
-def cleanup(lib, pwm, i2c, servo_1, servo_2, servo_3, led):
-    errTextC = create_string_buffer(1000)  # Текст ошибки. C type: char*
+def cleanup(lib, pwm, i2c, servo_1, servo_2, servo_3, servo_5, led):
+    errTextC = create_string_buffer(1000)
 
     errCode = lib.RI_SDK_sigmod_PWM_ResetAll(pwm, errTextC)
     if errCode != 0:
@@ -126,6 +138,11 @@ def cleanup(lib, pwm, i2c, servo_1, servo_2, servo_3, led):
         print(errCode, errTextC.raw.decode())
         sys.exit(2)        
 
+    errCode = lib.RI_SDK_DestroyComponent(servo_5, errTextC)
+    if errCode != 0:
+        print(errCode, errTextC.raw.decode())
+        sys.exit(2)        
+
     errCode = lib.RI_SDK_DestroyComponent(led, errTextC)
     if errCode != 0:
         print(errCode, errTextC.raw.decode())
@@ -136,6 +153,13 @@ def cleanup(lib, pwm, i2c, servo_1, servo_2, servo_3, led):
         print(errCode, errTextC.raw.decode())
         sys.exit(2)	
 
+def turn_by_pulse(lib, servo, dt):
+    errTextC = create_string_buffer(1000)
+    errCode = lib.RI_SDK_exec_ServoDrive_TurnByPulse(servo, dt, errTextC)
+    if errCode != 0:
+        print(errCode, errTextC.raw.decode())
+        sys.exit(2)
+
 def main():
 
     errTextC = create_string_buffer(1000)  # Текст ошибки. C type: char*
@@ -145,27 +169,69 @@ def main():
     servo_1 = c_int() 
     servo_2 = c_int() 
     servo_3 = c_int() 
+    servo_5 = c_int() 
 
     lib = cdll.LoadLibrary("C:\Windows\system32\librisdk.dll")
 
     init(lib, i2c, pwm)
-    servo_init(lib, pwm, servo_1, servo_2, servo_3)
+    servo_init(lib, pwm, servo_1, servo_2, servo_3, servo_5)
     led_init(lib, pwm, led)
 
+    # time.sleep(1) 
+    # turn_by_pulse(lib, servo_1, 2600)
 
-    # Поворот сервопривода на заданный угол с заданной угловой скоростью 
-    errCode = lib.RI_SDK_exec_ServoDrive_Turn(servo_2, 90, 100, c_bool(False), errTextC)
-    if errCode != 0:
-        print(errCode, errTextC.raw.decode())
-        sys.exit(2)
-    print(90)
+    # time.sleep(1) 
+    # turn_by_pulse(lib, servo_1, 1600)
 
-    errCode = lib.RI_SDK_exec_ServoDrive_Turn(servo_2, 90, 100, c_bool(False), errTextC)
-    if errCode != 0:
-        print(errCode, errTextC.raw.decode())
-        sys.exit(2)
-    print(90)
+    time.sleep(1) 
+    turn_by_pulse(lib, servo_3, 600)
+    time.sleep(1) 
 
+    turn_by_pulse(lib, servo_3, 1600)
+    time.sleep(1) 
+    turn_by_pulse(lib, servo_3, 2600)
+    time.sleep(1) 
+
+
+    # # Поворот сервопривода на заданный угол с заданной угловой скоростью 
+    # errCode = lib.RI_SDK_exec_ServoDrive_Turn(servo_3, 90, 100, c_bool(False), errTextC)
+    # if errCode != 0:
+    #     print(errCode, errTextC.raw.decode())
+    #     sys.exit(2)
+    # print(90)
+
+    # errCode = lib.RI_SDK_exec_ServoDrive_Turn(servo_3, 90, 100, c_bool(False), errTextC)
+    # if errCode != 0:
+    #     print(errCode, errTextC.raw.decode())
+    #     sys.exit(2)
+    # print(90)
+
+
+    # errCode = lib.RI_SDK_exec_ServoDrive_Turn(servo_5, 90, 100, c_bool(False), errTextC)
+    # if errCode != 0:
+    #     print(errCode, errTextC.raw.decode())
+    #     sys.exit(2)
+
+    # time.sleep(0.5)        
+
+    # errCode = lib.RI_SDK_exec_ServoDrive_TurnByPulse(servo_1, 2600, errTextC)
+    # if errCode != 0:
+    #     print(errCode, errTextC.raw.decode())
+    #     sys.exit(2)
+
+    # time.sleep(0.5)        
+
+    # errCode = lib.RI_SDK_exec_ServoDrive_TurnByPulse(servo_2, 2600, errTextC)
+    # if errCode != 0:
+    #     print(errCode, errTextC.raw.decode())
+    #     sys.exit(2)
+
+    # time.sleep(0.5)        
+
+    # errCode = lib.RI_SDK_exec_ServoDrive_TurnByPulse(servo_3, 2600, errTextC)
+    # if errCode != 0:
+    #     print(errCode, errTextC.raw.decode())
+    #     sys.exit(2)
 
 #    errCode = lib.RI_SDK_exec_ServoDrive_Turn(servo_1, 90, 100, c_bool(False), errTextC)
 #    if errCode != 0:
@@ -174,32 +240,32 @@ def main():
 
 
    # Поучение текущего угла поворота сервопривода
-    lib.RI_SDK_exec_ServoDrive_GetCurrentAngle.argtypes = [c_int, POINTER(c_int), c_char_p]
-    time.sleep(0.2)
-    angle = c_int()
-    errCode = lib.RI_SDK_exec_ServoDrive_GetCurrentAngle(servo_2, angle, errTextC)
-    if errCode != 0:
-        print(errCode, errTextC.raw.decode())
-        sys.exit(2) 
+    # lib.RI_SDK_exec_ServoDrive_GetCurrentAngle.argtypes = [c_int, POINTER(c_int), c_char_p]
+    # time.sleep(0.2)
+    # angle = c_int()
+    # errCode = lib.RI_SDK_exec_ServoDrive_GetCurrentAngle(servo_2, angle, errTextC)
+    # if errCode != 0:
+    #     print(errCode, errTextC.raw.decode())
+    #     sys.exit(2) 
 
-    print("angle: ", angle.value) 
-
-
-    lib.RI_SDK_exec_RGB_LED_SinglePulse.argtypes = [c_int, c_int, c_int, c_int, c_int, c_bool, c_char_p]
-    lib.RI_SDK_exec_RGB_LED_Flicker.argtypes = [c_int, c_int, c_int, c_int, c_int, c_int, c_bool, c_char_p]
+    # print("angle: ", angle.value) 
 
 
-    errCode = lib.RI_SDK_exec_RGB_LED_Flicker(led, 0, 255, 0, 500, 10, c_bool(False), errTextC)
-    if errCode != 0:
-        print(errCode, errTextC.raw.decode())
-        sys.exit(2)
+    # lib.RI_SDK_exec_RGB_LED_SinglePulse.argtypes = [c_int, c_int, c_int, c_int, c_int, c_bool, c_char_p]
+    # lib.RI_SDK_exec_RGB_LED_Flicker.argtypes = [c_int, c_int, c_int, c_int, c_int, c_int, c_bool, c_char_p]
 
-    errCode = lib.RI_SDK_exec_RGB_LED_SinglePulse(led, 0, 0, 255, 10000, c_bool(False), errTextC)
-    if errCode != 0:
-        print(errCode, errTextC.raw.decode())
-        sys.exit(2)
 
-    cleanup(lib, pwm, i2c, servo_1, servo_2, servo_3, led)
+    # errCode = lib.RI_SDK_exec_RGB_LED_Flicker(led, 0, 255, 0, 500, 10, c_bool(False), errTextC)
+    # if errCode != 0:
+    #     print(errCode, errTextC.raw.decode())
+    #     sys.exit(2)
+
+    # errCode = lib.RI_SDK_exec_RGB_LED_SinglePulse(led, 0, 0, 255, 10000, c_bool(False), errTextC)
+    # if errCode != 0:
+    #     print(errCode, errTextC.raw.decode())
+    #     sys.exit(2)
+
+    cleanup(lib, pwm, i2c, servo_1, servo_2, servo_3, servo_5, led)
     print("Success")
 
 if __name__ == "__main__":
