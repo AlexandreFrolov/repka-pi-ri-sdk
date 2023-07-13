@@ -160,6 +160,13 @@ def turn_by_pulse(lib, servo, dt):
         print(errCode, errTextC.raw.decode())
         sys.exit(2)
 
+def turn_by_angle(lib, servo, angle, speed):
+    errTextC = create_string_buffer(1000)
+    errCode = lib.RI_SDK_exec_ServoDrive_Turn(servo, angle, speed, c_bool(False), errTextC)
+    if errCode != 0:
+        print(errCode, errTextC.raw.decode())
+        sys.exit(2)
+
 def main():
 
     errTextC = create_string_buffer(1000)  # Текст ошибки. C type: char*
@@ -190,6 +197,16 @@ def main():
     turn_by_pulse(lib, servo_3, 1600)
     time.sleep(1) 
     turn_by_pulse(lib, servo_3, 2600)
+    time.sleep(1) 
+
+
+    turn_by_pulse(lib, servo_1, 1600)
+    time.sleep(1) 
+
+    turn_by_angle(lib, servo_1, 90, 100)
+    time.sleep(1) 
+
+    turn_by_angle(lib, servo_1, -90, 100)
     time.sleep(1) 
 
 
