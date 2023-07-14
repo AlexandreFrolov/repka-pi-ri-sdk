@@ -3,12 +3,18 @@ import time
 from ctypes import *
 
 class RiApi:
-    def __init__(self):
+    def __init__(self, is_async: c_bool):
         self.lib = cdll.LoadLibrary("C:\Windows\system32\librisdk.dll")        
         self.errTextC = create_string_buffer(1000)  # Текст ошибки. C type: char*
         self.i2c = c_int()
         self.pwm = c_int()
+        self.is_async = is_async
 
+    def async_on(self):
+        self.is_async = c_bool(True)         
+
+    def async_off(self):
+        self.is_async = c_bool(False)         
 
     def init(self):
         self.lib.RI_SDK_InitSDK.argtypes = [c_int, c_char_p]
@@ -65,7 +71,7 @@ class RiApi:
             sys.exit(2)
 
     def turn_by_angle(self, servo, angle, speed):
-        errCode = self.lib.RI_SDK_exec_ServoDrive_Turn(servo, angle, speed, c_bool(False), self.errTextC)
+        errCode = self.lib.RI_SDK_exec_ServoDrive_Turn(servo, angle, speed, self.is_async, self.errTextC)
         if errCode != 0:
             print(errCode, self.errTextC.raw.decode())
             sys.exit(2)
@@ -108,18 +114,18 @@ class RiApi:
 
     def led_pulse(self, led, r, g, b, duration):
         self.lib.RI_SDK_exec_RGB_LED_SinglePulse.argtypes = [c_int, c_int, c_int, c_int, c_int, c_bool, c_char_p]
-        errCode = self.lib.RI_SDK_exec_RGB_LED_SinglePulse(led, r, g, b, duration, c_bool(False), self.errTextC)
+        errCode = self.lib.RI_SDK_exec_RGB_LED_SinglePulse(led, r, g, b, duration, self.is_async, self.errTextC)
 
     def led_pulse_pause(self, led, r, g, b, duration, pause, limit):
         self.lib.RI_SDK_exec_RGB_LED_FlashingWithPause.argtypes = [c_int, c_int, c_int, c_int, c_int, c_int, c_int, c_bool, c_char_p]
-        errCode = self.lib.RI_SDK_exec_RGB_LED_FlashingWithPause(led, r, g, b, duration, pause, limit, False, self.errTextC)
+        errCode = self.lib.RI_SDK_exec_RGB_LED_FlashingWithPause(led, r, g, b, duration, pause, limit, self.is_async, self.errTextC)
         if errCode != 0:
             print(errCode, self.errTextC.raw.decode())
             sys.exit(2)
 
     def led_flicker(self, led, r, g, b, duration, limit):
         self.lib.RI_SDK_exec_RGB_LED_Flicker.argtypes = [c_int, c_int, c_int, c_int, c_int, c_int, c_bool, c_char_p]
-        errCode = self.lib.RI_SDK_exec_RGB_LED_Flicker(led, r, g, b, duration, limit, False, self.errTextC)
+        errCode = self.lib.RI_SDK_exec_RGB_LED_Flicker(led, r, g, b, duration, limit, self.is_async, self.errTextC)
         if errCode != 0:
             print(errCode, self.errTextC.raw.decode())
             sys.exit(2)  

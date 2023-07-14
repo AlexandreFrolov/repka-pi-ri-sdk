@@ -12,11 +12,14 @@ def main():
     servo_5 = c_int() 
     led = c_int()
 
-    api = RiApi()
+#    api = RiApi(c_bool(False))
+    api = RiApi(c_bool(True))
     api.init()
 
 
     api.add_led(led)
+
+    api.async_off()
 
     api.led_flicker(led, 255, 0, 0, 500, 5)
 
@@ -28,6 +31,7 @@ def main():
     api.led_pulse_pause(led, 0, 255, 0, 1000, 200, 3)
     api.led_pulse_pause(led, 0, 0, 255, 1000, 200, 3)
 
+    api.async_on()
 
     api.add_servo(servo_1, "mg90s", 0)
     api.add_servo(servo_4, "mg90s", 4)
@@ -70,7 +74,6 @@ def main():
     api.cleanup_servo(servo_1)
     api.cleanup_servo(servo_4)
     api.cleanup_servo(servo_5)
-
     api.cleanup_led(led)
     api.cleanup_final()
 
