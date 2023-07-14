@@ -35,6 +35,7 @@ class RiApi:
             sys.exit(2)
 #        print("descriptor: ", descriptor.value)
 
+
         errCode = self.lib.RI_SDK_CreateModelComponent("connector".encode(), "pwm".encode(), "pca9685".encode(), self.pwm, self.errTextC)
         if errCode != 0:
             print(errCode, self.errTextC.raw.decode())
