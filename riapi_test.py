@@ -16,7 +16,6 @@ def main():
     api = RiApi(c_bool(True))
     api.init()
 
-
     api.add_led(led)
 
     api.async_off()
