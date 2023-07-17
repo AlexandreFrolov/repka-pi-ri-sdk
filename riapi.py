@@ -1,11 +1,16 @@
 import sys
 import time
+import platform
 from ctypes import *
 
 class RiApi:
     def __init__(self, is_async: c_bool):
+        self.platform = platform.system()
         try:
-            self.lib = cdll.LoadLibrary("C:\Windows\system32\librisdk.dll")
+            if self.platform == "Windows":
+                self.lib = cdll.LoadLibrary("C:\Windows\system32\librisdk.dll")
+            if self.platform == "Linux":
+                self.lib = cdll.LoadLibrary("/usr/local/robohand_remote_control/librisdk.so")
         except OSError as e:
             raise Exception("Failed to load DLL: " + str(e))
 
