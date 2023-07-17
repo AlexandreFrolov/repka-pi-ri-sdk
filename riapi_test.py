@@ -60,18 +60,18 @@ def main():
 
 
 
-        api.set_middle(servo_1)
+
+        api.rotate(servo_1, 0, 100)
         time.sleep(2) 
         print("servo_1 angle: " + str(api.get_angle(servo_1)))
 
-        #api.rotate(servo_1, 0, 100)
-        #time.sleep(2) 
-        #print("servo_1 angle: " + str(api.get_angle(servo_1)))
+        api.rotate(servo_1, 1, 100)
+        time.sleep(2) 
+        print("servo_1 angle: " + str(api.get_angle(servo_1)))
 
-        # api.rotate(servo_1, 1, 100)
-        # time.sleep(2) 
-        # print("servo_1 angle: " + str(api.get_angle(servo_1)))
-
+        api.set_middle(servo_1)
+        time.sleep(2) 
+        print("servo_1 angle: " + str(api.get_angle(servo_1)))
 
         api.rotate_min_step(servo_1, 1, 100)
         time.sleep(2) 
