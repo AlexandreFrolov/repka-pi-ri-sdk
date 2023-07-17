@@ -65,10 +65,12 @@ class RiApi:
 
 
 
-    def add_custom_servo(self, servo, MaxDt, MinDt, MaxSpeed, RangeAngle):
+    def add_custom_servo(self, MaxDt, MinDt, MaxSpeed, RangeAngle, channel):
         self.lib.RI_SDK_CreateDeviceComponent.argtypes = [c_char_p, c_char_p,  POINTER(c_int), c_char_p]
         self.lib.RI_SDK_exec_ServoDrive_CustomDeviceInit.argtypes = [c_int, c_int, c_int, c_int, c_int, c_char_p]
+        self.lib.RI_SDK_LinkPWMToController.argtypes = [c_int, c_int, c_uint8, c_char_p]
 
+        servo = c_int()
         errCode = self.lib.RI_SDK_CreateDeviceComponent("executor".encode(), "servodrive".encode(),  servo, self.errTextC)
         if errCode != 0:
             raise Exception(f"add_custom_servo: RI_SDK_CreateDeviceComponent failed with error code {errCode}: {self.errTextC.raw.decode()}")
@@ -76,6 +78,12 @@ class RiApi:
         errCode = self.lib.RI_SDK_exec_ServoDrive_CustomDeviceInit(servo, MaxDt, MinDt, MaxSpeed, RangeAngle, self.errTextC)
         if errCode != 0:
             raise Exception(f"add_custom_servo: RI_SDK_exec_ServoDrive_CustomDeviceInit failed with error code {errCode}: {self.errTextC.raw.decode()}")
+
+        errCode = self.lib.RI_SDK_LinkServodriveToController(servo, self.pwm, channel, self.errTextC)
+        if errCode != 0:
+            raise Exception(f"add_servo: RI_SDK_LinkServodriveToController failed with error code {errCode}: {self.errTextC.raw.decode()}")     
+
+        return(servo)
 
 
     def rotate(self, servo, direction, speed):

@@ -21,30 +21,67 @@ def main():
         # api.led_flicker(led, 255, 0, 0, 500, 5)
         # api.led_flicker(led, 0, 255, 0, 500, 5)
         # api.led_flicker(led, 0, 0, 255, 500, 5)
-
 #        time.sleep(1) 
-
         # api.led_pulse(led, 255, 0, 0, 500)
         # api.led_pulse(led, 0, 255, 0, 500)
         # api.led_pulse(led, 0, 0, 255, 500)
-
         # api.led_pulse_pause(led, 255, 0, 0, 1000, 200, 3)
         # api.led_pulse_pause(led, 0, 255, 0, 1000, 200, 3)
         # api.led_pulse_pause(led, 0, 0, 255, 1000, 200, 3)
-
         # api.led_pulse_frequency(led, 255, 0, 0, 10, 10)
         # api.led_pulse_frequency(led, 0, 255, 0, 20, 10)
         # api.led_pulse_frequency(led, 0, 0, 255, 30, 10)
-
-
-
 #        api.async_on()
 
         api.add_servo(servo_1, "mg90s", 0)
-#        api.add_custom_servo(servo_1, 2165, 380, 100, 2000)
+#        servo_1 = api.add_custom_servo(2430, 365, 200, 229, 0)
+#       servo_1 = api.add_custom_servo(2160, 365, 200, 180, 0)
 
         api.add_servo(servo_4, "mg90s", 4)
         api.add_servo(servo_5, "mg90s", 5)
+
+        print("MG90S rotate")
+
+        api.rotate(servo_1, 0, 200) # 2320 mc на осциллографе
+        time.sleep(2) 
+        print("servo_1 angle: " + str(api.get_angle(servo_1))) # угол 229
+
+        api.rotate(servo_1, 1, 200) # 330 mc на осциллографе
+        time.sleep(2) 
+        print("servo_1 angle: " + str(api.get_angle(servo_1))) # угол 0
+
+
+        api.set_middle(servo_1) # 1330 mc на осциллографе
+        time.sleep(2) 
+        print("servo_1 angle: " + str(api.get_angle(servo_1))) # угол 114
+
+
+        print("MG90S by_pulse")
+
+        api.turn_by_pulse(servo_1, 2430) # 2330 mc на осциллографе
+#        api.turn_by_pulse(servo_1, 2650) # 2550 mc на осциллографе
+        time.sleep(2) 
+        print("servo_1 angle: " + str(api.get_angle(servo_1))) # угол 229 (custom 207)
+
+
+        api.turn_by_pulse(servo_1, 365) # 330 mc на осциллографе
+        time.sleep(2) 
+        print("servo_1 angle: " + str(api.get_angle(servo_1))) # угол 0
+        
+        api.turn_by_pulse(servo_1, 1395) # 1330 mc на осциллографе
+#        api.turn_by_pulse(servo_1, 1500) # 1430 mc на осциллографе
+        time.sleep(2) 
+        print("servo_1 angle: " + str(api.get_angle(servo_1))) # угол 114 (custom 103)
+        
+
+
+
+
+
+        # api.set_middle(servo_1)
+        # time.sleep(2) 
+        # print("servo_1 angle: " + str(api.get_angle(servo_1)))
+
 
 
         # MG90S
@@ -59,26 +96,12 @@ def main():
         # print("servo_1 angle: " + str(api.get_angle(servo_1)))
 
 
-
-
-        api.rotate(servo_1, 0, 100)
-        time.sleep(2) 
-        print("servo_1 angle: " + str(api.get_angle(servo_1)))
-
-        api.rotate(servo_1, 1, 100)
-        time.sleep(2) 
-        print("servo_1 angle: " + str(api.get_angle(servo_1)))
-
-        api.set_middle(servo_1)
-        time.sleep(2) 
-        print("servo_1 angle: " + str(api.get_angle(servo_1)))
-
-        api.rotate_min_step(servo_1, 1, 100)
-        time.sleep(2) 
-        print("servo_1 angle: " + str(api.get_angle(servo_1)))
-        api.rotate_min_step(servo_1, 0, 100)
-        time.sleep(2) 
-        print("servo_1 angle: " + str(api.get_angle(servo_1)))
+        # api.rotate_min_step(servo_1, 1, 100)
+        # time.sleep(2) 
+        # print("servo_1 angle: " + str(api.get_angle(servo_1)))
+        # api.rotate_min_step(servo_1, 0, 100)
+        # time.sleep(2) 
+        # print("servo_1 angle: " + str(api.get_angle(servo_1)))
 
 
         # api.turn_by_duty(servo_1, 75)

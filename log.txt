@@ -1,0 +1,59 @@
+runtime error: integer divide by zero 
+
+ goroutine 17 [running, locked to thread]:
+runtime/debug.Stack(0xc0000a3ac8, 0x6cab13c0, 0x6ca80520)
+	C:/Go-1.13.4/src/runtime/debug/stack.go:24 +0xa4
+rainbowsoft.ru/ri_sdk/api/main_api.handlePanic()
+	C:/Jenkins/workspace/ri_sdk_build/src/ri_sdk/api/main_api/basic.go:19 +0x5e
+panic(0x6cab13c0, 0x6ca80520)
+	C:/Go-1.13.4/src/runtime/panic.go:679 +0x1c0
+rainbowsoft.ru/ri_sdk/components/devices/executor/servodrive.convertPulseToAngle(...)
+	C:/Jenkins/workspace/ri_sdk_build/src/ri_sdk/components/devices/executor/servodrive/ServoDrive.go:607
+rainbowsoft.ru/ri_sdk/components/devices/executor/servodrive.(*Servodrive).Rotate(0xc000078120, 0x64e900, 0xc000078120, 0x2dd60a00048)
+	C:/Jenkins/workspace/ri_sdk_build/src/ri_sdk/components/devices/executor/servodrive/ServoDrive.go:260 +0x37c
+rainbowsoft.ru/ri_sdk/api/main_api.RI_SDK_exec_ServoDrive_Rotate(0x4, 0x0, 0x64, 0x0, 0x0, 0x0, 0x0)
+	C:/Jenkins/workspace/ri_sdk_build/src/ri_sdk/api/main_api/servodrive.go:331 +0x10f
+main.RI_SDK_exec_ServoDrive_Rotate(0x4, 0x64, 0x2dd5fc04cc0, 0x6caef340)
+	C:/Jenkins/workspace/ri_sdk_build/src/ri_sdk/api/shared/export/servodrive.go:175 +0x59
+main._cgoexpwrap_c9761bb8cb27_RI_SDK_exec_ServoDrive_Rotate(0x4, 0x64, 0x2dd5fc04cc0, 0x7ffa8befe89c)
+	_cgo_gotypes.go:938 +0x53
+
+runtime error: integer divide by zero 
+
+ goroutine 17 [running, locked to thread]:
+runtime/debug.Stack(0xc0000a9ac8, 0x6cab13c0, 0x6ca80520)
+	C:/Go-1.13.4/src/runtime/debug/stack.go:24 +0xa4
+rainbowsoft.ru/ri_sdk/api/main_api.handlePanic()
+	C:/Jenkins/workspace/ri_sdk_build/src/ri_sdk/api/main_api/basic.go:19 +0x5e
+panic(0x6cab13c0, 0x6ca80520)
+	C:/Go-1.13.4/src/runtime/panic.go:679 +0x1c0
+rainbowsoft.ru/ri_sdk/components/devices/executor/servodrive.convertPulseToAngle(...)
+	C:/Jenkins/workspace/ri_sdk_build/src/ri_sdk/components/devices/executor/servodrive/ServoDrive.go:607
+rainbowsoft.ru/ri_sdk/components/devices/executor/servodrive.(*Servodrive).Rotate(0xc0000f80c0, 0x64e900, 0xc0000f80c0, 0x261ec640048)
+	C:/Jenkins/workspace/ri_sdk_build/src/ri_sdk/components/devices/executor/servodrive/ServoDrive.go:260 +0x37c
+rainbowsoft.ru/ri_sdk/api/main_api.RI_SDK_exec_ServoDrive_Rotate(0x4, 0x0, 0x64, 0x0, 0x0, 0x0, 0x0)
+	C:/Jenkins/workspace/ri_sdk_build/src/ri_sdk/api/main_api/servodrive.go:331 +0x10f
+main.RI_SDK_exec_ServoDrive_Rotate(0x4, 0x64, 0x261eb8393f0, 0x6caef340)
+	C:/Jenkins/workspace/ri_sdk_build/src/ri_sdk/api/shared/export/servodrive.go:175 +0x59
+main._cgoexpwrap_c9761bb8cb27_RI_SDK_exec_ServoDrive_Rotate(0x4, 0x64, 0x261eb8393f0, 0x7ffa8befe89c)
+	_cgo_gotypes.go:938 +0x53
+
+runtime error: integer divide by zero 
+
+ goroutine 17 [running, locked to thread]:
+runtime/debug.Stack(0xc0000b3ac8, 0x6cab13c0, 0x6ca80520)
+	C:/Go-1.13.4/src/runtime/debug/stack.go:24 +0xa4
+rainbowsoft.ru/ri_sdk/api/main_api.handlePanic()
+	C:/Jenkins/workspace/ri_sdk_build/src/ri_sdk/api/main_api/basic.go:19 +0x5e
+panic(0x6cab13c0, 0x6ca80520)
+	C:/Go-1.13.4/src/runtime/panic.go:679 +0x1c0
+rainbowsoft.ru/ri_sdk/components/devices/executor/servodrive.convertPulseToAngle(...)
+	C:/Jenkins/workspace/ri_sdk_build/src/ri_sdk/components/devices/executor/servodrive/ServoDrive.go:607
+rainbowsoft.ru/ri_sdk/components/devices/executor/servodrive.(*Servodrive).Rotate(0xc00006c120, 0xc8e900, 0xc00006c120, 0x194ffb90048)
+	C:/Jenkins/workspace/ri_sdk_build/src/ri_sdk/components/devices/executor/servodrive/ServoDrive.go:260 +0x37c
+rainbowsoft.ru/ri_sdk/api/main_api.RI_SDK_exec_ServoDrive_Rotate(0x4, 0x0, 0xc8, 0x0, 0x0, 0x0, 0x0)
+	C:/Jenkins/workspace/ri_sdk_build/src/ri_sdk/api/main_api/servodrive.go:331 +0x10f
+main.RI_SDK_exec_ServoDrive_Rotate(0x4, 0xc8, 0x194ff42ed20, 0x6caef340)
+	C:/Jenkins/workspace/ri_sdk_build/src/ri_sdk/api/shared/export/servodrive.go:175 +0x59
+main._cgoexpwrap_c9761bb8cb27_RI_SDK_exec_ServoDrive_Rotate(0x4, 0xc8, 0x194ff42ed20, 0x7ffb0d52e89c)
+	_cgo_gotypes.go:938 +0x53
