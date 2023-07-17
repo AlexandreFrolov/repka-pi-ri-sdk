@@ -13,7 +13,6 @@ class RiApi:
                 self.lib = cdll.LoadLibrary("/usr/local/robohand_remote_control/librisdk.so")
         except OSError as e:
             raise Exception("Failed to load: " + str(e))
-
         self.errTextC = create_string_buffer(1000)  # Текст ошибки. C type: char*
         self.i2c = c_int()
         self.pwm = c_int()
