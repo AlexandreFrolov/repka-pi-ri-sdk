@@ -9,11 +9,25 @@ def main():
         servo_1 = c_int() 
         servo_4 = c_int() 
         servo_5 = c_int() 
+        rservo = c_int() 
         led = c_int()
 
-        api = RiApi(c_bool(False))
-    #    api = RiApi(c_bool(True))
+    #    api = RiApi(c_bool(False))
+        api = RiApi(c_bool(True))
         api.init()
+
+
+        api.add_rotate_servo(rservo, "mg996r", 8)
+        api.rotate_by_pulse(rservo, 2000)
+
+        time.sleep(5) 
+
+#        api.rotate_by_pulse(rservo, 1000)
+        api.stop_rservo(rservo)
+
+        sys.exit(2)
+
+
 
         api.add_led(led, 14, 15, 13)
 #        api.async_off()
@@ -73,9 +87,6 @@ def main():
         time.sleep(2) 
         print("servo_1 angle: " + str(api.get_angle(servo_1))) # угол 114 (custom 103)
         
-
-
-
 
 
         # api.set_middle(servo_1)

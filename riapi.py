@@ -63,8 +63,6 @@ class RiApi:
         if errCode != 0:
             raise Exception(f"add_servo: RI_SDK_LinkServodriveToController failed with error code {errCode}: {self.errTextC.raw.decode()}")        
 
-
-
     def add_custom_servo(self, MaxDt, MinDt, MaxSpeed, RangeAngle, channel):
         self.lib.RI_SDK_CreateDeviceComponent.argtypes = [c_char_p, c_char_p,  POINTER(c_int), c_char_p]
         self.lib.RI_SDK_exec_ServoDrive_CustomDeviceInit.argtypes = [c_int, c_int, c_int, c_int, c_int, c_char_p]
@@ -84,7 +82,6 @@ class RiApi:
             raise Exception(f"add_servo: RI_SDK_LinkServodriveToController failed with error code {errCode}: {self.errTextC.raw.decode()}")     
 
         return(servo)
-
 
     def rotate(self, servo, direction, speed):
         self.lib.RI_SDK_exec_ServoDrive_Rotate.argtypes = [c_int, c_int, c_int, c_bool, c_char_p]
@@ -136,6 +133,38 @@ class RiApi:
         errCode = self.lib.RI_SDK_DestroyComponent(servo, self.errTextC)
         if errCode != 0:
             raise Exception(f"cleanup_servo: RI_SDK_DestroyComponent failed with error code {errCode}: {self.errTextC.raw.decode()}")
+
+
+
+    def add_rotate_servo(self, rservo, servo_type, channel):
+        self.lib.RI_SDK_CreateModelComponent.argtypes = [c_char_p, c_char_p, c_char_p, POINTER(c_int), c_char_p]
+        self.lib.RI_SDK_LinkPWMToController.argtypes = [c_int, c_int, c_uint8, c_char_p]
+
+        errCode = self.lib.RI_SDK_CreateModelComponent("executor".encode(), "servodrive_rotate".encode(), servo_type.encode(), rservo, self.errTextC)
+        if errCode != 0:
+            raise Exception(f"add_rotate_servo: RI_SDK_CreateModelComponent failed with error code {errCode}: {self.errTextC.raw.decode()}")
+
+        errCode = self.lib.RI_SDK_LinkServodriveToController(rservo, self.pwm, channel, self.errTextC)
+        if errCode != 0:
+            raise Exception(f"addadd_rotate_servo_servo: RI_SDK_LinkServodriveToController failed with error code {errCode}: {self.errTextC.raw.decode()}")        
+
+
+
+    def rotate_by_pulse(self, rservo, dt):
+        self.lib.RI_SDK_exec_RServoDrive_RotateByPulse.argtypes = [c_int, c_int, c_bool, c_char_p]
+        errCode = self.lib.RI_SDK_exec_RServoDrive_RotateByPulse(rservo, dt, self.is_async, self.errTextC)
+        if errCode != 0:
+            raise Exception(f"rotate_by_pulse: RI_SDK_exec_RServoDrive_RotateByPulse failed with error code {errCode}: {self.errTextC.raw.decode()}")
+
+    def stop_rservo(self, rservo):
+        self.lib.RI_SDK_exec_RServoDrive_Stop.argtypes = [c_int, c_char_p]
+        errCode = self.lib.RI_SDK_exec_RServoDrive_Stop(rservo, self.errTextC)
+        if errCode != 0:
+            raise Exception(f"stop_rservo: RI_SDK_exec_RServoDrive_Stop failed with error code {errCode}: {self.errTextC.raw.decode()}")
+
+
+
+
 
     def add_led(self, led, r, g, b):
         self.lib.RI_SDK_CreateModelComponent.argtypes = [c_char_p, c_char_p, c_char_p, POINTER(c_int), c_char_p]
