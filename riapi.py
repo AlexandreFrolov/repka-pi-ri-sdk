@@ -148,7 +148,26 @@ class RiApi:
         if errCode != 0:
             raise Exception(f"addadd_rotate_servo_servo: RI_SDK_LinkServodriveToController failed with error code {errCode}: {self.errTextC.raw.decode()}")        
 
+    def add_custom_rotate_servo(self, min_pulse, max_pulse, minPulseCounterClockwise, maxPulseCounterClockwise, channel):
+        self.lib.RI_SDK_CreateDeviceComponent.argtypes = [c_char_p, c_char_p,  POINTER(c_int), c_char_p]
+        self.lib.RI_SDK_exec_RServoDrive_CustomDeviceInit.argtypes = [c_int, c_int, c_int, c_int, c_int, c_char_p]
+        self.lib.RI_SDK_LinkPWMToController.argtypes = [c_int, c_int, c_uint8, c_char_p]
 
+        rservo = c_int()
+
+        errCode = self.lib.RI_SDK_CreateDeviceComponent("executor".encode(), "servodrive_rotate".encode(), rservo, self.errTextC)
+        if errCode != 0:
+            raise Exception(f"add_custom_rotate_servo: RI_SDK_CreateDeviceComponent failed with error code {errCode}: {self.errTextC.raw.decode()}")
+
+        errCode = self.lib.RI_SDK_exec_RServoDrive_CustomDeviceInit(rservo, min_pulse, max_pulse, minPulseCounterClockwise, maxPulseCounterClockwise, self.errTextC)
+        if errCode != 0:
+            raise Exception(f"add_custom_rotate_servo: RI_SDK_exec_RServoDrive_CustomDeviceInit failed with error code {errCode}: {self.errTextC.raw.decode()}")
+
+        errCode = self.lib.RI_SDK_LinkServodriveToController(rservo, self.pwm, channel, self.errTextC)
+        if errCode != 0:
+            raise Exception(f"add_custom_rotate_servo: RI_SDK_LinkServodriveToController failed with error code {errCode}: {self.errTextC.raw.decode()}")        
+
+        return rservo
 
     def rotate_by_pulse(self, rservo, dt):
         self.lib.RI_SDK_exec_RServoDrive_RotateByPulse.argtypes = [c_int, c_int, c_bool, c_char_p]
